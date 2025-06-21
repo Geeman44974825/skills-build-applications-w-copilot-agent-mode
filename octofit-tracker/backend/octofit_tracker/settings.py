@@ -80,9 +80,10 @@ WSGI_APPLICATION = "octofit_tracker.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'octofit_db.sqlite3',
+    "default": {
+        "ENGINE": "djongo",
+        "NAME": "octofit_db",
+        # Add USER, PASSWORD, HOST, PORT if needed for production
     }
 }
 
