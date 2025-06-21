@@ -1,9 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
-    username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=True)
-    role = models.CharField(max_length=50)  # 'coach' or 'student'
+
+# Custom user model extending AbstractUser
+class User(AbstractUser):
+    role = models.CharField(max_length=50, default='student')  # 'coach' or 'student'
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -12,14 +13,14 @@ class User(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
-    members = models.ManyToManyField(User, related_name='teams')
+    members = models.ManyToManyField('User', related_name='teams')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
 
 class Activity(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
     duration = models.IntegerField()  # in minutes
@@ -31,7 +32,7 @@ class Activity(models.Model):
         return f"{self.user.username} - {self.name} ({self.date})"
 
 class Leaderboard(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
     rank = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
