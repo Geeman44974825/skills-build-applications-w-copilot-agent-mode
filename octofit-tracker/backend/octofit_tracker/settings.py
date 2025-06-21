@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "octofit_app",
     "rest_framework",
     "corsheaders",
+    "octofit_tracker",
 ]
 
 MIDDLEWARE = [
@@ -78,10 +78,9 @@ WSGI_APPLICATION = "octofit_tracker.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "djongo",
-        "NAME": "octofit_db",
-        # Add USER, PASSWORD, HOST, PORT if needed for production
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'octofit_db.sqlite3',
     }
 }
 

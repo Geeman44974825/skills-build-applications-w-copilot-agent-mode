@@ -1,26 +1,52 @@
 from django.db import models
 
 class User(models.Model):
+    username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
-    name = models.CharField(max_length=100)
-    password = models.CharField(max_length=128)
-    # Add additional fields as needed
+    role = models.CharField(max_length=50)  # 'coach' or 'student'
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.username
 
 class Team(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
     members = models.ManyToManyField(User, related_name='teams')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    activity_type = models.CharField(max_length=50)
-    duration = models.IntegerField()
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    duration = models.IntegerField()  # in minutes
+    distance = models.FloatField(default=0.0)  # in kilometers
     date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.name} ({self.date})"
 
 class Leaderboard(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    points = models.IntegerField()
+    points = models.IntegerField(default=0)
+    rank = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Rank {self.rank}"
+
+    class Meta:
+        ordering = ['rank']
 
 class Workout(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    difficulty = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
